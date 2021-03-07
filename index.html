@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Busca por cidade</title>
+    </head>
+
+    <body>
+        <h1>Buscar por Cidade</h1>
+            <label>Nome da Cidade:</label>
+            <input type="text" id='cidade' value=""/>
+            <button id="botao" onclick="buscar()">Buscar</button>
+            <svg id="svg" width="350" height="350">
+            <path id="visivel"/>
+            </svg> 
+
+    <script>
+
+        function buscar(){
+
+            const cidade = document.getElementById('cidade').value;
+
+            const requestPath = new Request(`http://localhost:3000/getSvg/${cidade}`);
+            const requestViewBox = new Request(`http://localhost:3000/getViewBox/${cidade}`);
+
+            fetch(requestPath)
+                .then(response => {
+                    return response.json();     
+            }).then(response => {
+                document.getElementById('visivel').setAttribute('d', response[0].st_assvg)
+            })
+
+            fetch(requestViewBox)
+                .then(response => {
+                    return response.json();
+            }).then(response =>{
+                document.getElementById('svg').setAttribute('viewBox', response[0].getviewbox);
+            })
+
+        }
+        
+    </script>
+
+    </body>
+</html>
